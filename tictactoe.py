@@ -88,7 +88,11 @@ def utility(board):
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
     return point[winner(board)]
-
+    
+def check_winner(line):
+    if line[0] == line[1] and line[0] == line[2]:
+        return line[0]
+    return None
 
 def minimax(board):
     """
@@ -96,25 +100,20 @@ def minimax(board):
     """
     if terminal(board):
         return None
-    p = player(board)
-    if p == X:
-        value, move = max_value(board,0)
+
+    if player(board) == X:
+        value, move = max_value(board)
     else:
-        value, move = min_value(board,0)
+        value, move = min_value(board)
     return move
     
-def check_winner(line):
-    if line[0] == line[1] and line[0] == line[2]:
-        return line[0]
-    return None
-
-def max_value(board, step):
-    if terminal(board) or step > max_deep:
+def max_value(board):
+    if terminal(board):
         return utility(board), None
     value = -math.inf
     optimal_move = None
     for action in actions(board):
-        v, move = value, min_value(result(board, action), step+1)
+        v, move = min_value(result(board, action))
         if value < v:
             value = v
             optimal_move = action
@@ -122,13 +121,14 @@ def max_value(board, step):
                 break
     return value, optimal_move
 
-def min_value(board, step):
-    if terminal(board) or step > max_deep:
+def min_value(board):
+    if terminal(board):
         return utility(board), None
-    value = math.inf
+    
+    value = float('inf')
     optimal_move = None
     for action in actions(board):
-        v, move = value, max_value(result(board, action), step+1)
+        v, move = max_value(result(board, action))
         if value > v:
             value = v
             optimal_move = action
