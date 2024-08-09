@@ -48,7 +48,7 @@ def result(board, action):
     if board[action[0]][action[1]] != EMPTY:
         raise Exception("Not validable move")
     newBoard = copy.deepcopy(board)
-    newBoard[action[0]][action[0]] = player(board)
+    newBoard[action[0]][action[1]] = player(board)
     return newBoard
 
 
